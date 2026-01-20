@@ -6,6 +6,7 @@ const rl = readline.createInterface({
 });
 
 const usuarios = [];
+let idUsuario = 1;
 
 function perguntar(texto, callback) {
     rl.question(texto, (resposta) => {
@@ -13,9 +14,18 @@ function perguntar(texto, callback) {
     });
 }
 
+function acharUsuarioPorId(id){
+    for(let i = 0; i < usuarios.length; i++){
+        if(usuarios[i].id === id){
+            return i;
+        }
+    }
+    return -1;
+}
+
 function mostrarMenu() {
     console.log("=================================");
-    console.log("CRUD USUARIOS");
+    console.log("CRUD USUÁRIOS");
     console.log("=================================");
     console.log("1) Cadastrar usuário.");
     console.log("2) Listar usuários.");
@@ -65,9 +75,11 @@ function cadastrarUsuario() {
             const usuario = {
                 nome: nome,
                 cpf: cpf,
+                id: idUsuario
             }
             usuarios.push(usuario);
-            console.log("Usuário cadastrado com sucesso.");
+            console.log("Usuário cadastrado com sucesso. ID do usuário: ",idUsuario);
+            idUsuario++;
             return menu();
         });
     });
@@ -80,14 +92,36 @@ function listarUsuarios() {
     } else {
         for (let i = 0; i < usuarios.length; i++) {
             console.log(
-                "USUÁRIO", i, ":",
                 "Nome: ", usuarios[i].nome,
                 "| CPF: ", usuarios[i].cpf,
+                "| ID do usuário: ", usuarios[i].id,
                 "\n"
             )
         }
         return menu();
     }
+}
+
+function deletarUsuario() {
+    perguntar("\nInsira o ID do usuário a ser deletado: ", (idDeletadoStr) => {
+        const idDeletado = Number(idDeletadoStr);
+        const posicao = acharUsuarioPorId(idDeletado);
+        if(Number.isNaN(idDeletado)){
+            console.log("\nERRO: Insira um ID válido.");
+            return menu();
+        }
+        if(usuarios.length === 0){
+            console.log("\nERRO: Nenhum usuário encontrado.\n");
+            return menu();
+        }
+        if(posicao === -1){
+            console.log("\nERRO: Nenhum usuário com esse ID encontrado.\n");
+            return menu();
+        }
+        usuarios.splice(posicao, 1);
+        console.log("\nUsuário deletado com sucesso.\n");
+        return menu();
+    });
 }
 
 menu();
