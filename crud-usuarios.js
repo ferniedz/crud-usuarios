@@ -5,6 +5,14 @@ const rl = readline.createInterface({
     output: process.stdout,
 });
 
+const usuarios = []; 
+
+function perguntar(texto, callback){
+    rl.question(texto, (resposta) => {
+        callback(resposta)
+    });
+}
+
 function mostrarMenu() {
     console.log("=================================");
     console.log("CRUD USUARIOS");
@@ -38,6 +46,30 @@ function menu() {
                 console.log("Opção inválida!");
                 return menu();
         }
+    });
+}
+
+function cadastrarUsuario(){
+    perguntar("Insira o nome completo: ", (nomeCompletoStr) => {
+        perguntar("Insira o CPF: ", (cpfStr) => {
+            const nome = nomeCompletoStr.trim();
+            const cpf = Number(cpfStr);
+            if(!nome){
+                console.log("\nERRO: Insira um nome válido.\n");
+                return menu();
+            }
+            if(Number.isNaN(cpf)){
+                console.log("\nERRO: Insira um CPF válido.\n");
+                return menu();
+            }
+            const usuario = {
+                nome: nome,
+                cpf: cpf,
+            }
+            usuarios.push(usuario);
+            console.log("Usuário cadastrado com sucesso.");
+            return menu();
+        });
     });
 }
 
