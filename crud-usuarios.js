@@ -1,13 +1,13 @@
 const readline = require("readline");
 
 const rl = readline.createInterface({
-    input: process, setEncoding,
+    input: process.stdin,
     output: process.stdout,
 });
 
-const usuarios = []; 
+const usuarios = [];
 
-function perguntar(texto, callback){
+function perguntar(texto, callback) {
     rl.question(texto, (resposta) => {
         callback(resposta)
     });
@@ -49,16 +49,16 @@ function menu() {
     });
 }
 
-function cadastrarUsuario(){
+function cadastrarUsuario() {
     perguntar("Insira o nome completo: ", (nomeCompletoStr) => {
         perguntar("Insira o CPF: ", (cpfStr) => {
             const nome = nomeCompletoStr.trim();
             const cpf = Number(cpfStr);
-            if(!nome){
+            if (!nome) {
                 console.log("\nERRO: Insira um nome válido.\n");
                 return menu();
             }
-            if(Number.isNaN(cpf)){
+            if (Number.isNaN(cpf)) {
                 console.log("\nERRO: Insira um CPF válido.\n");
                 return menu();
             }
@@ -71,6 +71,23 @@ function cadastrarUsuario(){
             return menu();
         });
     });
+}
+
+function listarUsuarios() {
+    if (usuarios.length === 0) {
+        console.log("\nERRO: Nenhum usuário encontrado.\n");
+        return menu();
+    } else {
+        for (let i = 0; i < usuarios.length; i++) {
+            console.log(
+                "USUÁRIO", i, ":",
+                "Nome: ", usuarios[i].nome,
+                "| CPF: ", usuarios[i].cpf,
+                "\n"
+            )
+        }
+        return menu();
+    }
 }
 
 menu();
