@@ -116,8 +116,12 @@ function editarUsuario() {
                     console.log("\nERRO: Insira um CPF válido.\n");
                     return menu();
                 }
-                usuarios[posicao].nome = novoNome;
-                usuarios[posicao].cpf = novoCpf;
+                if(novoNome){
+                    usuarios[posicao].nome = novoNome;
+                }
+                if(novoCpf){
+                    usuarios[posicao].cpf = novoCpf;
+                }
                 console.log("\nUsuário editado com sucesso.\n");
                 return menu();
             });
